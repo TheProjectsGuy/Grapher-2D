@@ -1,6 +1,6 @@
 void setup() {
   fullScreen();
-  dataPoint = new Point();
+  dataPoint = new Point();  // To keep track to tracer
 }
 
 
@@ -30,16 +30,43 @@ void draw() {
 }
 
 void drawFunctions() {
+
   stroke(255, 0, 0);
   strokeWeight(1);
   f1.plot();
-  stroke(0,0,255);
-  f2.plot();
 
   stroke(0, 255, 0);
   func.plot();
+
+  stroke(0, 0, 0);
+  coolFunction.plot();
 }
 
-void keyPressed() { 
-  dataPoint = new Point();
+Point zoomPoint1, zoomPoint2;
+
+void mousePressed() {
+  if (mouseButton == RIGHT)
+    dataPoint = new Point(screen2cart_X(mouseX), screen2cart_Y(mouseY));
+  else if (mouseButton == LEFT) {
+    zoomPoint1 = new Point(screen2cart_X(mouseX), screen2cart_Y(mouseY));
+  }
+}
+
+void keyPressed() {
+  Bounds.maxX = 20;
+  Bounds.maxY = 20;
+  Bounds.minX = -20;
+  Bounds.minY = -20;
+  precision = 0.001;
+}
+
+void mouseReleased() {
+  if (mouseButton == LEFT) {
+    zoomPoint2 = new Point(screen2cart_X(mouseX), screen2cart_Y(mouseY));
+    Bounds.minX = zoomPoint1.x;
+    Bounds.minY = zoomPoint1.y;
+    Bounds.maxX = zoomPoint2.x;
+    Bounds.maxY = zoomPoint2.y;
+    precision /= 2;
+  }
 }
